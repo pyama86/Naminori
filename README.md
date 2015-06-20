@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ```ruby
 #! /usr/bin/env ruby
-require File.dirname(__FILE__) + '/naminori/naminori'
+require 'naminori'
 
 service_options = { vip:"192.168.77.9", role: "dns" }
 
