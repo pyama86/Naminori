@@ -25,7 +25,16 @@ Or install it yourself as:
 require 'rubygems'
 require 'naminori'
 
-service_options = { vip:"192.168.77.9", role: "dns" }
+notifier_options = {
+  webhook_url: "https://hooks.slack.com/services/XXXXXX",
+  channel: "#pyama"
+}
+
+service_options = {
+  vip:"192.168.77.9",
+  role: "dns",
+  notifier: Naminori::Notifier.get_notifier("slack" ,notifier_options)
+}
 
 case
 when Naminori::Serf.role?("dns")
@@ -33,6 +42,7 @@ when Naminori::Serf.role?("dns")
 when Naminori::Serf.role?("lb")
   Naminori::Lb.health_check("dns", "lvs",service_options)
 end
+
 ```
 
 #### health_check_example.rb
@@ -44,6 +54,7 @@ require 'naminori'
 service_options = { vip:"192.168.77.9", role: "dns" }
 
 Naminori::Lb.health_check("dns", "lvs", service_options)
+```
 ```zsh
 # crontab -l
 # Chef Name: health_check
@@ -58,9 +69,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 ```
 Naminori::Service.event(service_name, lb_name, options)
 ```
-* service_name
+* service_name:
   dns or http
-* lb_name
+* lb_name:
   lvs
 * options(dns_default)
 ```
@@ -78,4 +89,3 @@ Naminori::Service.event(service_name, lb_name, options)
 ```
 ## Author
 * pyama
-
