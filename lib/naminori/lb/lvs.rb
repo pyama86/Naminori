@@ -15,7 +15,7 @@ module Naminori
           ops[:protocols].collect do |protocol|
             merge_option =  ops.merge({ protocol: protocol })
             if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
-              self.send("#{type}_message", merge_option[:rip])
+              self.send("#{type}_message", merge_option)
               true
             end
           end.all? {|res| res }
@@ -45,7 +45,7 @@ module Naminori
         end
 
         def lvs_option(rip, service)
-          { vip: service.config.vip, rip: rip, protocols: service.config.protocol, port: service.config.port, method: service.config.method }
+          { service: service, vip: service.config.vip, rip: rip, protocols: service.config.protocol, port: service.config.port, method: service.config.method }
         end
 
         def command_option(type, ops)
@@ -68,12 +68,16 @@ module Naminori
           end
         end
 
-        def add_message(ip)
-          puts "add member ip:#{ip}"
+        def add_message(options)
+          message = "add member ip:#{options[:ip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+          puts message
+          options[:service].config.notifier.add_server(message) if options[:service].config.notifier
         end
 
-        def delete_message(ip)
-          puts "delete member ip:#{ip}"
+        def delete_message(options)
+          message = "delete member ip:#{options[:ip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+          puts message
+          options[:service].config.notifier.delete_server(message) if options[:service].config.notifier
         end
       end
     end

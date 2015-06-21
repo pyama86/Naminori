@@ -7,7 +7,9 @@ require 'naminori/service'
 require 'naminori/service/base'
 require 'naminori/service/configure'
 require 'naminori/service/dns'
+require 'naminori/notifier'
 require 'resolv'
+require 'slack-notifier'
 
 
 module Naminori

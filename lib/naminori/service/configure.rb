@@ -2,7 +2,7 @@
 module Naminori
   class Service
     class Configure
-      attr_reader :service, :role, :port, :protocol, :vip, :method, :query, :retry, :timeout
+      attr_reader :role, :port, :protocol, :vip, :method, :query, :retry, :timeout, :notifier
       def initialize(options)
         @role     = options[:role]
         @port     = options[:port]
@@ -12,6 +12,7 @@ module Naminori
         @query    = options[:query]
         @retry    = options[:retry]
         @timeout  = options[:timeout]
+        @notifier = options[:notifier]
       end
     end
   end
