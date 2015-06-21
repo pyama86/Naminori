@@ -19,7 +19,7 @@ module Naminori
           port: "53",
           protocol: ["udp", "tcp"],
           vip: "192.168.77.9",
-          method: "gateway",
+          method: "nat",
           query: "pepabo.com",
           retry: 3,
           timeout: 3,
