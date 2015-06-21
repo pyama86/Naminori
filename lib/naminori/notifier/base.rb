@@ -9,12 +9,8 @@ module Naminori
         )
       end
 
-      def add_member(message)
+      def send(type, message)
         raise "Called abstract method: add_server"
-      end
-
-      def delete_member(message)
-        raise "Called abstract method: delete_server"
       end
 
       def default_config

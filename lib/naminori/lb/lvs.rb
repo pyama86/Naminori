@@ -15,7 +15,7 @@ module Naminori
           ops[:protocols].collect do |protocol|
             merge_option =  ops.merge({ protocol: protocol })
             if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
-              self.send("#{type}_message", merge_option)
+              notifier(type, merge_option)
               true
             end
           end.all? {|res| res }
@@ -68,16 +68,10 @@ module Naminori
           end
         end
 
-        def add_message(options)
-          message = "add member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+        def notifier(type, options)
+          message = "#{type} member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
           puts message
-          options[:service].config.notifier.add_member(message) if options[:service].config.notifier
-        end
-
-        def delete_message(options)
-          message = "delete member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
-          puts message
-          options[:service].config.notifier.delete_member(message) if options[:service].config.notifier
+          options[:service].config.notifier.send(type, message) if options[:service].config.notifier
         end
       end
     end

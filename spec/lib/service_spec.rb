@@ -16,10 +16,15 @@ describe Naminori::Service do
       end
 
       it do
-        expect(Naminori::Lb::Lvs).to receive(:add_message).twice
-        expect(Naminori::Lb::Lvs).to receive(:delete_member).never
+        expect(Naminori::Lb::Lvs).to receive(:notifier).twice
         options = { notifier: Naminori::Notifier.get_notifier("slack") }
         Naminori::Service.event("dns", "lvs", options)
+      end
+
+      it do
+        expect(Naminori::Lb::Lvs).to receive(:add_member).once
+        expect(Naminori::Lb::Lvs).to receive(:delete_member).never
+        Naminori::Service.event("dns", "lvs")
       end
     end
 
@@ -31,10 +36,15 @@ describe Naminori::Service do
         allow(STDIN).to receive(:gets).and_return(SerfStub.event)
       end
       it do
-        expect(Naminori::Lb::Lvs).to receive(:delete_message).twice
-        expect(Naminori::Lb::Lvs).to receive(:add_member).never
+        expect(Naminori::Lb::Lvs).to receive(:notifier).twice
         options = { notifier: Naminori::Notifier.get_notifier("slack")}
         Naminori::Service.event("dns", "lvs", options)
+      end
+
+      it do
+        expect(Naminori::Lb::Lvs).to receive(:add_member).never
+        expect(Naminori::Lb::Lvs).to receive(:delete_member).once
+        Naminori::Service.event("dns", "lvs")
       end
     end
   end

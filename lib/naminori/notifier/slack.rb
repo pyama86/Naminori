@@ -2,16 +2,10 @@
 module Naminori
   class Notifier
     class Slack < Base
-      def add_member(message)
+      def send(type, message)
+        icon type == "add" ? ":white_check_mark:" : ":no_entry_sign:"
         notifier = ::Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
-        notifier.ping ":white_check_mark:" + message, icon_emoji: ":sparkle:"
-      rescue => e
-        p e
-      end
-
-      def delete_member(message)
-        notifier = ::Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
-        notifier.ping ":no_entry_sign:" + message, icon_emoji: ":sparkle:"
+        notifier.ping  icon + message, icon_emoji: ":sparkle:"
       rescue => e
         p e
       end
