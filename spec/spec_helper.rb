@@ -4,7 +4,6 @@ CodeClimate::TestReporter.start
 require 'rspec'
 require 'naminori'
 require 'support/lb'
-require 'support/service'
 require 'support/serf'
 
 Dir["./support/**/*.rb"].each do |f|

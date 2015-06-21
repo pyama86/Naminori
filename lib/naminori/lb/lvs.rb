@@ -11,15 +11,14 @@ module Naminori
           transaction("delete", lvs_option(rip, service))
         end
 
-        private
-
         def transaction(type, ops)
-          ops[:protocols].each do |protocol|
+          ops[:protocols].collect do |protocol|
             merge_option =  ops.merge({ protocol: protocol })
             if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
               self.send("#{type}_message", merge_option[:rip])
+              true
             end
-          end
+          end.all? {|res| res }
         end
 
         def add?(ops)

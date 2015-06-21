@@ -18,7 +18,7 @@ module Naminori
         end
       end
 
-      def initialize(options)
+      def initialize(options={})
         @config = Naminori::Service::Configure.new(
           default_config.merge(options)
         )

@@ -14,5 +14,9 @@ lb001.dev.local   192.168.78.10:7946  alive  role=lb
 EOS
       members.split("\n")
     end
+
+    def event
+      "dns001.dev.local\t192.168.78.12\tdns\trole=dns\n"
+    end
   end
 end
