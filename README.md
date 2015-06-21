@@ -25,7 +25,7 @@ Or install it yourself as:
 require 'rubygems'
 require 'naminori'
 
-service_options = { vip:"<%= node["lb"]["ext_vip"] %>", role: "dns" }
+service_options = { vip:"192.168.77.9", role: "dns" }
 
 case
 when Naminori::Serf.role?("dns")
