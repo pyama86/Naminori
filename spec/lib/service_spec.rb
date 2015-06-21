@@ -3,6 +3,7 @@ describe Naminori::Service do
   describe 'event' do
     before do
       allow(Naminori::Serf).to receive(:members).and_return(SerfStub.exists_member)
+      allow_any_instance_of(Slack::Notifier).to receive(:ping).and_return(true)
       allow_any_instance_of(Kernel).to receive(:system).and_return(true)
     end
 
@@ -13,10 +14,12 @@ describe Naminori::Service do
         allow(Naminori::Serf).to receive(:join?).and_return(true)
         allow(STDIN).to receive(:gets).and_return(SerfStub.event)
       end
+
       it do
         expect(Naminori::Lb::Lvs).to receive(:add_member).once
         expect(Naminori::Lb::Lvs).to receive(:delete_member).never
-        Naminori::Service.event("dns", "lvs")
+        options = { notifier: Naminori::Notifier.get_notifier("slack")}
+        Naminori::Service.event("dns", "lvs", options)
       end
     end
 
@@ -30,7 +33,8 @@ describe Naminori::Service do
       it do
         expect(Naminori::Lb::Lvs).to receive(:add_member).never
         expect(Naminori::Lb::Lvs).to receive(:delete_member).once
-        Naminori::Service.event("dns", "lvs")
+        options = { notifier: Naminori::Notifier.get_notifier("slack")}
+        Naminori::Service.event("dns", "lvs", options)
       end
     end
   end

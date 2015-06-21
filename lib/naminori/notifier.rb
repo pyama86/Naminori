@@ -2,7 +2,7 @@
 module Naminori
   class Notifier
     class << self
-      def get_notifier(notifier, options)
+      def get_notifier(notifier, options={})
         case notifier
         when "slack"
           Naminori::Notifier::Slack.new(options)
