@@ -4,13 +4,13 @@ module Naminori
     class Dns < Naminori::Service::Base
 
       def healty?(ip)
-          dns = Resolv::DNS.new(:nameserver => ip )
-          dns.timeouts = config.timeout
-          begin
-            dns.getaddress(@config.query)
-          rescue => e
-            false
-          end
+        dns = Resolv::DNS.new(:nameserver => ip )
+        dns.timeouts = config.timeout
+        begin
+          dns.getaddress(@config.query)
+        rescue => e
+          false
+        end
       end
 
       def default_config
