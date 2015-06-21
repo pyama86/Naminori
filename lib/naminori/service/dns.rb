@@ -18,7 +18,7 @@ module Naminori
           role: "dns",
           port: "53",
           protocol: ["udp", "tcp"],
-          vip: "10.10.10.1",
+          vip: "192.168.77.9",
           method: "gateway",
           query: "pepabo.com",
           retry: 3,

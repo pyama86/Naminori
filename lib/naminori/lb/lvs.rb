@@ -16,8 +16,7 @@ module Naminori
         def transaction(type, ops)
           ops[:protocols].each do |protocol|
             merge_option =  ops.merge({ protocol: protocol })
-            if self.send("#{type}?", merge_option)
-              `ipvsadm #{command_option(type, merge_option)}`
+            if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
               self.send("#{type}_message", merge_option[:rip])
             end
           end

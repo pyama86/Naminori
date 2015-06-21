@@ -2,7 +2,7 @@
 module Naminori
   class Lb
     class << self
-      def health_check(service_name, lb_name, options)
+      def health_check(service_name, lb_name, options={})
         service = Naminori::Service.get_service(service_name).new(options)
         members = Naminori::Serf.get_alive_member_by_role(service.config.role)
 
