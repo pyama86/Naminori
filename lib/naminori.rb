@@ -8,6 +8,8 @@ require 'naminori/service/base'
 require 'naminori/service/configure'
 require 'naminori/service/dns'
 require 'naminori/notifier'
+require 'naminori/notifier/base'
+require 'naminori/notifier/slack'
 require 'resolv'
 require 'slack-notifier'
 
