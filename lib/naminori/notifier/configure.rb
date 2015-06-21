@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 module Naminori
-  class Service
+  class Notifier
     class Configure
       attr_reader :webhook_url, :channel, :user
       def initialize(options)
