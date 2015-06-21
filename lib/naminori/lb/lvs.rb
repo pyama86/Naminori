@@ -69,13 +69,13 @@ module Naminori
         end
 
         def add_message(options)
-          message = "add member ip:#{options[:ip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+          message = "add member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
           puts message
           options[:service].config.notifier.add_server(message) if options[:service].config.notifier
         end
 
         def delete_message(options)
-          message = "delete member ip:#{options[:ip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+          message = "delete member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
           puts message
           options[:service].config.notifier.delete_server(message) if options[:service].config.notifier
         end
