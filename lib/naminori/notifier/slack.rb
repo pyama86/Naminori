@@ -3,12 +3,12 @@ module Naminori
   class Notifier
     class Slack < Base
       def add_server(message)
-        notifier = Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
+        notifier = ::Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
         notifier.ping message
       end
 
       def delete_server(message)
-        notifier = Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
+        notifier = ::Slack::Notifier.new(config.webhook_url, { channel: config.channel, username: config.user})
         notifier.ping message
       end
 
