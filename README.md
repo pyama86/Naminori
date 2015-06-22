@@ -18,8 +18,11 @@ Or install it yourself as:
 ## Usage
 
 ### exemple
-
 ####  envent_example.rb
+1. check the event classification
+2. add or delete rip if these member-join or member-leave(faile)
+3. enent target LoadBaranser is health_check with fetch member
+
 ```ruby
 #! /usr/bin/env ruby
 require 'rubygems'
@@ -45,7 +48,40 @@ end
 
 ```
 
+#### example loadbarance serf config
+```
+{
+  "event_handlers": [
+    "/opt/serf/event_handlers/envent_example.rb"
+  ],
+  "interface": "enp0s9",
+  "discover": "cache-dns",
+  "tags": {
+    "role": "lb"
+  },
+  "log_level": "debug"
+}
+```
+
+#### example dns serf config
+```
+{
+  "event_handlers": [
+
+  ],
+  "interface": "enp0s8",
+  "discover": "cache-dns",
+  "tags": {
+    "role": "dns"
+  }
+}
+```
+
 #### health_check_example.rb
+1. Using cron to the health check of the service
+2. Service is removed from the member if that is not healthy
+   * Parameter [query, timeout ,retry]
+
 ```ruby
 #! /usr/bin/env ruby
 require 'rubygems'
@@ -65,7 +101,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 
 
 
-#### Service Event
+### Service Event Detail
 ```
 Naminori::Service.event(service_name, lb_name, options)
 ```
@@ -73,8 +109,10 @@ Naminori::Service.event(service_name, lb_name, options)
   dns or http
 * lb_name:
   lvs
-* options(dns_default)
+* options
+
 ```
+#dns default
         {
           role: "dns",               # role name
           port: "53",                # service port
