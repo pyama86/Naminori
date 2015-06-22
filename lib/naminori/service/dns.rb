@@ -15,15 +15,15 @@ module Naminori
 
       def default_config
         {
-          role: "dns",
-          port: "53",
-          protocol: ["udp", "tcp"],
-          vip: "192.168.77.9",
-          method: "nat",
-          query: "pepabo.com",
-          retry: 3,
-          timeout: 3,
-          notifier: nil
+          role:      "dns",
+          port:      "53",
+          protocols: ["udp", "tcp"],
+          vip:       "192.168.77.9",
+          method:    "nat",
+          query:     "pepabo.com",
+          retry:     3,
+          timeout:   3,
+          notifier:  nil
         }
       end
     end

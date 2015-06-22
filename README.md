@@ -76,15 +76,15 @@ Naminori::Service.event(service_name, lb_name, options)
 * options(dns_default)
 ```
         {
-          role: "dns",              # role name
-          port: "53",               # service port
-          protocol: ["udp", "tcp"], # protocol(array)
-          vip: "192.168.77.9",      # service vip
-          method: "gateway",        # lvs_method gateway/ip/nat
-          query: "pepabo.com",      # health_check_query
-          retry: 3,                 # health_check_retry_count
-          timeout: 3,               # health_check_time_out
-          notifier: nil             # notifier
+          role: "dns",               # role name
+          port: "53",                # service port
+          protocols: ["udp", "tcp"], # protocol(array)
+          vip: "192.168.77.9",       # service vip
+          method: "gateway",         # lvs_method gateway/ip/nat
+          query: "pepabo.com",       # health_check_query
+          retry: 3,                  # health_check_retry_count
+          timeout: 3,                # health_check_time_out
+          notifier: nil              # notifier
         }
 ```
 ## Author

@@ -16,15 +16,15 @@ module Naminori
 
       def default_config
         {
-          role: "http",
-          port: "80",
-          protocol: ["tcp"],
-          vip: "192.168.77.9",
-          method: "nat",
-          query: "index.html",
-          retry: 3,
-          timeout: 3,
-          notifier: nil
+          role:       "http",
+          port:       "80",
+          protocols:  ["tcp"],
+          vip:        "192.168.77.9",
+          method:     "nat",
+          query:      "index.html",
+          retry:      3,
+          timeout:    3,
+          notifier:   nil
         }
       end
     end

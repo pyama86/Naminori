@@ -10,6 +10,8 @@ module Naminori
         case service_name
         when "dns"
           Naminori::Service::Dns
+        when "http"
+          Naminori::Service::Http
         end
       end
     end

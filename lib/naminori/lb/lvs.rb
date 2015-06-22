@@ -45,7 +45,7 @@ module Naminori
         end
 
         def lvs_option(rip, service)
-          { service: service, vip: service.config.vip, rip: rip, protocols: service.config.protocol, port: service.config.port, method: service.config.method }
+          { service: service, vip: service.config.vip, rip: rip, protocols: service.config.protocols, port: service.config.port, method: service.config.method }
         end
 
         def command_option(type, ops)
