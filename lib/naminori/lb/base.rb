@@ -13,7 +13,7 @@ module Naminori
         def notifier(type, options)
           message = "#{type} member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
           puts message
-          options[:service].config.notifier.send(type, message) if options[:service].config.notifier
+          Naminori::Notifier.send(type, message) if Naminori::Notifier::Configure.instance.enable?
         end
       end
     end

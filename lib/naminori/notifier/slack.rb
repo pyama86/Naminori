@@ -9,14 +9,6 @@ module Naminori
       rescue => e
         p e
       end
-
-      def default_config
-        {
-          webhook_url: "",
-          channel: "general",
-          user: "naminori-notifier"
-        }
-      end
     end
   end
 end
