@@ -7,7 +7,7 @@ module Naminori
         @config = Naminori::Notifier::Configure.instance
       end
 
-      def send(type, message)
+      def notifier(type, message)
         raise "Called abstract method: add_server"
       end
     end

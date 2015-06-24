@@ -28,15 +28,15 @@ Or install it yourself as:
 require 'rubygems'
 require 'naminori'
 
-notifier_options = {
+Naminori::Notifier::Configure.instance.set({
   webhook_url: "https://hooks.slack.com/services/XXXXXX",
-  channel: "#pyama"
-}
+  channel: "#pyama",
+  user:    "#naminori"
+})
 
 service_options = {
   vip:"192.168.77.9",
-  role: "dns",
-  notifier: Naminori::Notifier.get_notifier("slack" ,notifier_options)
+  role: "dns"
 }
 
 case
@@ -121,8 +121,7 @@ Naminori::Service.event(service_name, lb_name, options)
           method: "gateway",         # lvs_method gateway/ip/nat
           query: "pepabo.com",       # health_check_query
           retry: 3,                  # health_check_retry_count
-          timeout: 3,                # health_check_time_out
-          notifier: nil              # notifier
+          timeout: 3                 # health_check_time_out
         }
 ```
 ## Author
