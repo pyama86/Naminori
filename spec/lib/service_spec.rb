@@ -5,6 +5,11 @@ describe Naminori::Service do
       allow(Naminori::Serf).to receive(:members).and_return(SerfStub.exists_member)
       allow_any_instance_of(Slack::Notifier).to receive(:ping).and_return(true)
       allow_any_instance_of(Kernel).to receive(:system).and_return(true)
+      Naminori::Notifier::Configure.instance.set({
+        webhook_url: "https://hooks.slack.com/services/XXXXXX",
+        channel: "#pyama",
+        user:    "#naminori"
+      })
     end
 
     describe 'member-join' do
@@ -19,8 +24,7 @@ describe Naminori::Service do
 
         it do
           expect(Naminori::Lb::Lvs).to receive(:notifier).exactly(notifer_count).times
-          options = { notifier: Naminori::Notifier.get_notifier("slack") }
-          Naminori::Service.event(service, "lvs", options)
+          Naminori::Service.event(service, "lvs")
         end
 
         it do
@@ -53,8 +57,7 @@ describe Naminori::Service do
         end
         it do
           expect(Naminori::Lb::Lvs).to receive(:notifier).exactly(notifer_count).times
-          options = { notifier: Naminori::Notifier.get_notifier("slack")}
-          Naminori::Service.event(service, "lvs", options)
+          Naminori::Service.event(service, "lvs")
         end
 
         it do
