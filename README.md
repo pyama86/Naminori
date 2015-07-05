@@ -28,10 +28,10 @@ Or install it yourself as:
 require 'rubygems'
 require 'naminori'
 
-notifier_options = {
-  webhook_url: "https://hooks.slack.com/services/XXXXXX",
-  channel: "#pyama"
-}
+Naminoti::Notifier.configure do
+  webhook_url "https://hooks.slack.com/services/XXXXXX"
+  channel     "#pyama"
+end
 
 service_options = {
   vip:"192.168.77.9",

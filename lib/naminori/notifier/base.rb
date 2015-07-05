@@ -4,7 +4,7 @@ module Naminori
     class Base
       attr_reader :config
       def initialize()
-        @config = Naminori::Notifier::Configure.instance
+        @config = Naminori::Notifier::Configure
       end
 
       def send(type, message)

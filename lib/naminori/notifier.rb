@@ -3,9 +3,8 @@ module Naminori
   class Notifier
     class << self
       def send(type, message)
-        config = Naminori::Notifier::Configure.instance
         case
-        when config.webhook_url && config.user && config.channel
+        when Naminori::Notifier::Configure.slack_enable?
           get_notifier("slack").send(type, message)
         end
       end
@@ -15,6 +14,10 @@ module Naminori
         when "slack"
           Naminori::Notifier::Slack.new
         end
+      end
+
+      def configure(&block)
+        Naminori::Notifier::Configure.set(&block)
       end
     end
   end

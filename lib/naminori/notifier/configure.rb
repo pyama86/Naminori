@@ -1,19 +1,37 @@
 #! /usr/bin/env ruby
-require 'singleton'
 module Naminori
   class Notifier
     class Configure
-      include Singleton
-      attr_reader :webhook_url, :channel, :user
+      class << self
+        def set(&block)
+          instance_eval(&block)
+        end
 
-      def set(options)
-        @webhook_url = options[:webhook_url]
-        @channel     = options[:channel]
-        @user        = options[:user]
-      end
+        def webhook_url(url=nil)
+          @@_webhook_url = url if url
+          @@_webhook_url
+        end
+        
+        def channel(channel=nil)
+          @@channel = channel if channel
+          @@channel
+        end
 
-      def enable?
-        webhook_url && channel && user
+        def user(user=nil)
+          @@user = user if user
+          @@user
+        end
+      
+        def clear
+          class_variables.each do |v|
+            class_variable_set(v, nil)
+          end
+        end
+        
+
+        def slack_enable?
+          webhook_url && channel && user
+        end
       end
     end
   end
