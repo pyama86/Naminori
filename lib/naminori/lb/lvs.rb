@@ -22,21 +22,21 @@ module Naminori
         end
 
         def add?(ops)
-          vip_exists?(ops) && !delete?(ops)
+          exist_vip?(ops) && !delete?(ops)
         end
 
         def delete?(ops)
-          fetch_service(ops).each do |line|
-            return true if line.match(/#{ops[:rip]}:/)
-          end
-          false
+          exist_ip?(ops, ops[:rip])
         end
 
-        def vip_exists?(ops)
-          fetch_service(ops).each do |line|
-            return true if line.match(/#{ops[:vip]}:/)
+        def exist_vip?(ops)
+          exist_ip?(ops, ops[:vip])
+        end
+
+        def exist_ip?(ops, ip)
+          fetch_service(ops).find do |line|
+            line.match(/#{ip}/)
           end
-          false
         end
 
         def fetch_service(ops)
