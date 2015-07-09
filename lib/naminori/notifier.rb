@@ -2,10 +2,10 @@
 module Naminori
   class Notifier
     class << self
-      def send(type, message)
+      def notify(type, message)
         case
         when Naminori.notify_config.slack_enable?
-          get_notifier("slack").send(type, message)
+          get_notifier("slack").notify(type, message)
         end
       end
 

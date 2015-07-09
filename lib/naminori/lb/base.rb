@@ -13,7 +13,7 @@ module Naminori
         def notifier(type, options)
           message = "#{type} member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
           puts message
-          Naminori::Notifier.send(type, message)
+          Naminori::Notifier.notify(type, message)
         end
       end
     end
