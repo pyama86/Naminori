@@ -35,8 +35,7 @@ end
 
 service_options = {
   vip:"192.168.77.9",
-  role: "dns",
-  notifier: Naminori::Notifier.get_notifier("slack" ,notifier_options)
+  role: "dns"
 }
 
 case
@@ -102,8 +101,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 ```
 Naminori::Service::Dns.event(lb_name, options)
 ```
-* service_name:
-  dns or http
 * lb_name:
   lvs
 * options
@@ -119,7 +116,6 @@ Naminori::Service::Dns.event(lb_name, options)
           query: "pepabo.com",       # health_check_query
           retry: 3,                  # health_check_retry_count
           timeout: 3,                # health_check_time_out
-          notifier: nil              # notifier
         }
 ```
 ## Author
