@@ -3,8 +3,8 @@ module Naminori
   module Notifier
     class Base
       class << self
-        def notifier(type, message)
-          raise "Called abstract method: add_server"
+        def notify(type, message)
+          raise "Called abstract method: notify"
         end
       end
     end
