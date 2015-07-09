@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 module Naminori
-  class Notifier
+  module Notifier
     class Configure
       def clear
         instance_variables.each do |v|
@@ -27,11 +27,12 @@ module Naminori
         @_user
       end
     end
+
+    def self.config(&block)
+      @_config ||= Naminori::Notifier::Configure.new
+      @_config.instance_eval(&block) if block
+      @_config
+    end
   end
 
-  def self.notify_config(&block)
-    @_notify_config ||= Naminori::Notifier::Configure.new
-    @_notify_config.instance_eval(&block) if block
-    @_notify_config
-  end
 end

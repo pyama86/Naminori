@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 module Naminori
-  class Notifier
+  module Notifier
     class Base
       def notifier(type, message)
         raise "Called abstract method: add_server"
