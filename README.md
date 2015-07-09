@@ -41,9 +41,9 @@ service_options = {
 
 case
 when Naminori::Serf.role?("dns")
-  Naminori::Service.event("dns", "lvs", service_options)
+  Naminori::Service::Dns.event("lvs", service_options)
 when Naminori::Serf.role?("lb")
-  Naminori::Lb.health_check("dns", "lvs",service_options)
+  Naminori::Service::Dns.health_check("lvs", service_options)
 end
 
 ```
@@ -89,7 +89,7 @@ require 'naminori'
 
 service_options = { vip:"192.168.77.9", role: "dns" }
 
-Naminori::Lb.health_check("dns", "lvs", service_options)
+Naminori::Service::Dns.health_check("lvs", service_options)
 ```
 ```zsh
 # crontab -l
@@ -98,12 +98,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 * * * * * for i in `seq 0 10 59`;do (sleep ${i}; /opt/serf/event_handlers/health_check_example.rb)& done;
 ```
 
-
-
-
 ### Service Event Detail
 ```
-Naminori::Service.event(service_name, lb_name, options)
+Naminori::Service::Dns.event(lb_name, options)
 ```
 * service_name:
   dns or http

@@ -24,6 +24,20 @@ module Naminori
         )
       end
 
+      def health_check(lb_name, options={})
+        service = self.new(options)
+        members = Naminori::Serf.get_alive_member_by_role(service.config.role)
+
+        members.each do |member|
+          ip = member[:ip]
+          if service.healty?(ip)
+            get_lb(lb_name).add_member(ip, service)
+          elsif service.config.retry.times.all? { sleep 1; !service.healty?(ip) }
+            get_lb(lb_name).delete_member(ip, service)
+          end
+        end if members
+      end
+      
       def healty?(ip)
         raise "Called abstract method: healty?"
       end
