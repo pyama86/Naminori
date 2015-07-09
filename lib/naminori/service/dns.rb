@@ -2,7 +2,6 @@
 module Naminori
   class Service
     class Dns < Naminori::Service::Base
-
       def healty?(ip)
         dns = Resolv::DNS.new(:nameserver => ip )
         dns.timeouts = config.timeout

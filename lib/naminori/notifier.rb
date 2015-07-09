@@ -12,7 +12,7 @@ module Naminori
       def get_notifier(notifier)
         case notifier
         when "slack"
-          Naminori::Notifier::Slack.new
+          Naminori::Notifier::Slack
         end
       end
 

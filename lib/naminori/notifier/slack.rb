@@ -2,18 +2,20 @@
 module Naminori
   module Notifier
     class Slack < Base
-      def notify(type, message)
-        icon = type == "add" ? ":white_check_mark:" : ":no_entry_sign:"
-        notifier = ::Slack::Notifier.new(
-          Naminori::Notifier.config.webhook_url,
-          {
-            channel: Naminori::Notifier.config.channel, 
-            username: Naminori::Notifier.config.user
-          }
-        )
-        notifier.ping  icon + message, icon_emoji: ":sparkle:"
-      rescue => e
-        p e
+      class << self
+        def notify(type, message)
+          icon = type == "add" ? ":white_check_mark:" : ":no_entry_sign:"
+          notifier = ::Slack::Notifier.new(
+            Naminori::Notifier.config.webhook_url,
+            {
+              channel: Naminori::Notifier.config.channel, 
+              username: Naminori::Notifier.config.user
+            }
+          )
+          notifier.ping  icon + message, icon_emoji: ":sparkle:"
+        rescue => e
+          p e
+        end
       end
     end
   end
