@@ -27,12 +27,5 @@ module Naminori
         @_user
       end
     end
-
-    def self.config(&block)
-      @_config ||= Naminori::Notifier::Configure.new
-      @_config.instance_eval(&block) if block
-      @_config
-    end
   end
-
 end

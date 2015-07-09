@@ -19,7 +19,12 @@ module Naminori
       def configure(&block)
         Naminori::Notifier.config(&block)
       end
+   
+      def config(&block)
+        @_config ||= Naminori::Notifier::Configure.new
+        @_config.instance_eval(&block) if block
+        @_config
+      end
     end
   end
-  
 end
