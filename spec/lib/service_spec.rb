@@ -13,7 +13,7 @@ describe Naminori::Service do
     end
 
     describe 'member-join' do
-      shared_examples_for 'member-join' do
+      shared_examples 'member-join' do
         before do
           allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.unregistered_rip)
           allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(true)
@@ -24,31 +24,31 @@ describe Naminori::Service do
 
         it do
           expect(Naminori::Lb::Lvs).to receive(:notifier).exactly(notifer_count).times
-          Naminori::Service.event(service, "lvs")
+          service.event("lvs", {})
         end
 
         it do
           expect(Naminori::Lb::Lvs).to receive(:add_member).once
           expect(Naminori::Lb::Lvs).to receive(:delete_member).never
-          Naminori::Service.event(service, "lvs")
+          service.event("lvs", {})
         end
       end
 
       describe 'dns' do
-        let(:service) { "dns" }
+        let(:service) { Naminori::Service::Dns }
         let(:notifer_count) { 2 }
         it_behaves_like 'member-join'
       end
 
       describe 'http' do
-        let(:service) { "http" }
+        let(:service) { Naminori::Service::Http }
         let(:notifer_count) { 1 }
         it_behaves_like 'member-join'
       end
 
     end
     describe 'member-leave' do
-      shared_examples_for 'member-leave' do
+      shared_examples 'member-leave' do
         before do
           allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.registered_rip)
           allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(true)
@@ -80,48 +80,63 @@ describe Naminori::Service do
       end
     end
   end
+
   describe 'helth_check' do
     before do
       allow(Naminori::Serf).to receive(:members).and_return(SerfStub.exists_member)
       allow_any_instance_of(Kernel).to receive(:system).and_return(true)
     end
 
-    describe 'good health' do
+    shared_examples "good health" do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.unregistered_rip)
-        allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(true)
+        allow_any_instance_of(service).to receive(:healty?).and_return(true)
       end
 
       it do
         expect(Naminori::Lb::Lvs).to receive(:add_member).once
         expect(Naminori::Lb::Lvs).to receive(:delete_member).never
-        Naminori::Service::Dns.health_check("lvs")
+        service.health_check("lvs", {})
       end
     end
 
-    describe 'keep good health' do
+    shared_examples 'keep good health' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.registered_rip)
-        allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(true)
+        allow_any_instance_of(service).to receive(:healty?).and_return(true)
       end
 
       it do
         expect(Naminori::Lb::Lvs).to receive(:delete_member).never
-        Naminori::Service::Dns.health_check("lvs")
+        service.health_check("lvs", {})
       end
     end
 
-    describe 'bad health' do
+    shared_examples 'bad health' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.registered_rip)
-        allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(false)
+        allow_any_instance_of(service).to receive(:healty?).and_return(false)
       end
 
       it do
         expect(Naminori::Lb::Lvs).to receive(:add_member).never
         expect(Naminori::Lb::Lvs).to receive(:delete_member).once
-        Naminori::Service::Dns.health_check("lvs")
+        service.health_check("lvs", {})
       end
+    end
+
+    context 'dns' do
+      let(:service) { Naminori::Service::Dns }
+      it_behaves_like 'good health'
+      it_behaves_like 'keep good health'
+      it_behaves_like 'bad health'
+    end
+
+    context 'http' do
+      let(:service) { Naminori::Service::Http }
+      it_behaves_like 'good health'
+      it_behaves_like 'keep good health'
+      it_behaves_like 'bad health'
     end
   end
 end

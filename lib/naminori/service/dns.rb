@@ -22,8 +22,7 @@ module Naminori
           method:    "nat",
           query:     "pepabo.com",
           retry:     3,
-          timeout:   3,
-          notifier:  nil
+          timeout:   3
         }
       end
     end

@@ -23,8 +23,7 @@ module Naminori
           method:     "nat",
           query:      "index.html",
           retry:      3,
-          timeout:    3,
-          notifier:   nil
+          timeout:    3
         }
       end
     end

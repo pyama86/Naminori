@@ -17,10 +17,9 @@ module Naminori
           Naminori::Serf.gets[:ip]
         end
       
-        def health_check(lb_name, options={})
+        def health_check(lb_name, options)
           service = self.new(options)
           members = Naminori::Serf.get_alive_member_by_role(service.config.role)
-
           members.each do |member|
             ip = member[:ip]
             if service.healty?(ip)
@@ -33,7 +32,7 @@ module Naminori
         
       end
 
-      def initialize(options={})
+      def initialize(options)
         @config = Naminori::Service::Configure.new(
           default_config.merge(options)
         )

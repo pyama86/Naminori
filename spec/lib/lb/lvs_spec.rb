@@ -12,7 +12,7 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service.get_service("dns").new
+        service = Naminori::Service.get_service("dns").new({})
         options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "udp"})
         expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
         expect(Naminori::Lb::Lvs.add_member("192.168.78.12", service)).to eq true
@@ -24,7 +24,7 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service.get_service("dns").new
+        service = Naminori::Service.get_service("dns").new({})
         options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "tcp"})
         expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
         expect(Naminori::Lb::Lvs.add_member("192.168.78.12", service)).to eq false 
@@ -44,7 +44,7 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service.get_service("dns").new
+        service = Naminori::Service.get_service("dns").new({})
         options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "udp"})
         expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53"
         expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", service)).to eq true
@@ -56,7 +56,7 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service.get_service("dns").new
+        service = Naminori::Service.get_service("dns").new({})
         options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "tcp"})
         expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53"
         expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", service)).to eq false 
