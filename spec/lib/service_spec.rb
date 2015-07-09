@@ -57,24 +57,24 @@ describe Naminori::Service do
         end
         it do
           expect(Naminori::Lb::Lvs).to receive(:notifier).exactly(notifer_count).times
-          Naminori::Service.event(service, "lvs")
+          service.event("lvs", {})
         end
 
         it do
           expect(Naminori::Lb::Lvs).to receive(:add_member).never
           expect(Naminori::Lb::Lvs).to receive(:delete_member).once
-          Naminori::Service.event(service, "lvs")
+          service.event("lvs", {})
         end
       end
 
       describe 'dns' do
-        let(:service) { "dns" }
+        let(:service) { Naminori::Service::Dns }
         let(:notifer_count) { 2 }
         it_behaves_like 'member-leave'
       end
 
       describe 'http' do
-        let(:service) { "http" }
+        let(:service) { Naminori::Service::Http }
         let(:notifer_count) { 1 }
         it_behaves_like 'member-leave'
       end
