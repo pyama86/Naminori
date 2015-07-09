@@ -16,26 +16,27 @@ module Naminori
         def event_ip
           Naminori::Serf.gets[:ip]
         end
+      
+        def health_check(lb_name, options={})
+          service = self.new(options)
+          members = Naminori::Serf.get_alive_member_by_role(service.config.role)
+
+          members.each do |member|
+            ip = member[:ip]
+            if service.healty?(ip)
+              Naminori::Lb.get_lb(lb_name).add_member(ip, service)
+            elsif service.config.retry.times.all? { sleep 1; !service.healty?(ip) }
+              Naminori::Lb.get_lb(lb_name).delete_member(ip, service)
+            end
+          end if members
+        end
+        
       end
 
       def initialize(options={})
         @config = Naminori::Service::Configure.new(
           default_config.merge(options)
         )
-      end
-
-      def health_check(lb_name, options={})
-        service = self.new(options)
-        members = Naminori::Serf.get_alive_member_by_role(service.config.role)
-
-        members.each do |member|
-          ip = member[:ip]
-          if service.healty?(ip)
-            get_lb(lb_name).add_member(ip, service)
-          elsif service.config.retry.times.all? { sleep 1; !service.healty?(ip) }
-            get_lb(lb_name).delete_member(ip, service)
-          end
-        end if members
       end
       
       def healty?(ip)
@@ -45,6 +46,7 @@ module Naminori
       def default_config
         raise "Called abstract method: default_config"
       end
+
     end
   end
 end
