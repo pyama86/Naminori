@@ -33,15 +33,16 @@ module Naminori
         end
 
         def vip_exists?(ops)
-          vips = fetch_service(ops)
-          vips.each do |line|
+          fetch_service(ops).each do |line|
             return true if line.match(/#{ops[:vip]}:/)
-          end if vips
+          end
           false
         end
 
         def fetch_service(ops)
-          `ipvsadm -Ln --#{ops[:protocol]}-service #{ops[:vip]}:#{ops[:port]}`.split("\n")
+          service = `ipvsadm -Ln --#{ops[:protocol]}-service #{ops[:vip]}:#{ops[:port]}`.split("\n")
+          raise "fetch errror!" unless service
+          service
         end
 
         def lvs_option(rip, service)
