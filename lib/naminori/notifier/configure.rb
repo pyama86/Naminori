@@ -3,29 +3,24 @@ module Naminori
   module Notifier
     class Configure
       def clear
-        instance_variables.each do |v|
-          instance_variable_set(v, nil)
-        end
+        @config = nil
       end
 
       def slack_enable?
-        webhook_url && channel && user
-      end
-
-      def webhook_url(url=nil)
-        @_webhook_url = url if url
-        @_webhook_url
+        %w(webhook_url channel user).all? {|c| @config[c.to_sym] } if @config
       end
       
-      def channel(channel=nil)
-        @_channel = channel if channel 
-        @_channel
+      def self.attribute(name)
+        define_method(name, ->(val=nil){
+          @config ||= {}
+          @config[name] = val if val
+          @config[name]
+        })
       end
 
-      def user(user=nil)
-        @_user = user if user 
-        @_user
-      end
+      attribute :webhook_url
+      attribute :channel
+      attribute :user
     end
   end
 end
