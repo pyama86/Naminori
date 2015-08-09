@@ -28,22 +28,24 @@ Or install it yourself as:
 require 'rubygems'
 require 'naminori'
 
-Naminoti::Notifier.configure do
-  webhook_url "https://hooks.slack.com/services/XXXXXX"
-  channel     "#pyama"
+Naminori.configure do |config|
+  config.notifier :slack do
+    webhook_url "https://hooks.slack.com/services/XXXXXX"
+    channel     "#pyama"
+  end
+
+  config.service :dns_server do
+    service :dns
+    lb      :lvs
+    vip     "192.68.77.9"
+  end
+
+  config.lb :lb_server do
+    check [:dns_server]
+  end
 end
 
-service_options = {
-  vip:"192.168.77.9",
-  role: "dns"
-}
-
-case
-when Naminori::Serf.role?("dns")
-  Naminori::Service::Dns.event("lvs", service_options)
-when Naminori::Serf.role?("lb")
-  Naminori::Service::Dns.health_check("lvs", service_options)
-end
+Naminori.event
 
 ```
 
@@ -86,9 +88,25 @@ end
 require 'rubygems'
 require 'naminori'
 
-service_options = { vip:"192.168.77.9", role: "dns" }
+Naminori.configure do |config|
+  config.notifier :slack do
+    webhook_url "https://hooks.slack.com/services/XXXXXX"
+    channel     "#pyama"
+  end
 
-Naminori::Service::Dns.health_check("lvs", service_options)
+  config.service :dns_server do
+    service :dns
+    lb      :lvs
+    vip     "192.68.77.9"
+  end
+
+  config.lb :lb_server do
+    check [:dns_server]
+  end
+end
+
+Naminori.check
+
 ```
 ```zsh
 # crontab -l
@@ -97,18 +115,9 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 * * * * * for i in `seq 0 10 59`;do (sleep ${i}; /opt/serf/event_handlers/health_check_example.rb)& done;
 ```
 
-### Service Event Detail
-```
-Naminori::Service::Dns.event(lb_name, options)
-```
-* lb_name:
-  lvs
-* options
-
-```
+### default parameter
 #dns default
         {
-          role: "dns",               # role name
           port: "53",                # service port
           protocols: ["udp", "tcp"], # protocol(array)
           vip: "192.168.77.9",       # service vip

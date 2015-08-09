@@ -1,4 +1,5 @@
 require "naminori/version"
+require 'naminori/configure'
 require 'naminori/serf'
 require 'naminori/lb'
 require 'naminori/lb/base'

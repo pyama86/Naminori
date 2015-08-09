@@ -2,6 +2,11 @@
 module Naminori
   module Notifier
     class Configure
+      def initialize(type)
+        @config ||= {}
+        @config['type'] = type
+      end
+
       def clear
         @config = nil
       end
@@ -12,7 +17,6 @@ module Naminori
       
       def self.attribute(name)
         define_method(name, ->(val=nil){
-          @config ||= {}
           @config[name] = val if val
           @config[name]
         })
