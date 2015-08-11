@@ -1,13 +1,16 @@
 module Naminori
   class Configure
-    def self.resource(rname)
-      define_method(rname, ->(name=nil, &block){
-        name = name.to_s
-        instance_variable_set("@#{rname}_configs", []) unless instance_variable_get("@#{rname}_configs")
-        config = eval("Naminori::#{rname.capitalize}::Configure.new(\"#{name}\")")
-        config.instance_eval(&block) if block
-        eval("@#{rname}_configs") << config
-        eval("@#{rname}_configs")
+    def self.resource(resource_name)
+      define_method(resource_name, ->(name=nil, &block){
+        @_config ||= {}
+        @_config[resource_name] ||= []
+        if name
+          config = Object.const_get("Naminori::#{resource_name.capitalize}::Configure").new
+          config.name(name)
+          config.instance_eval(&block) if block
+          @_config[resource_name] << config
+        end
+        @_config[resource_name] << config
       })
     end
 

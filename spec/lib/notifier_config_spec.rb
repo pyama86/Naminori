@@ -1,38 +1,21 @@
 require 'spec_helper'
 describe Naminori::Notifier do
   describe 'set_value_check' do
-
-    before do
-      Naminori::Notifier.configure.clear
-    end
-
     describe "ok" do
       before do
-        Naminori::Notifier.configure do
-          webhook_url "http://hoge.com"
-          user        "hoge"
-          channel     "fuga"
+        Naminori.configure do |config|
+          config.notifier :slack do
+            webhook_url "http://hoge.com"
+            user        "hoge"
+            channel     "fuga"
+          end
         end
       end
 
       it do
-        expect(Naminori::Notifier.configure.slack_enable?).to be_truthy
-        expect(Naminori::Notifier.configure.webhook_url).to eq "http://hoge.com"
-        expect(Naminori::Notifier.configure.user).to eq "hoge"
-        expect(Naminori::Notifier.configure.channel).to eq "fuga"
-      end
-    end
-
-    describe "ng" do
-      before do
-        Naminori::Notifier.configure do
-          user        "hoge"
-          channel     "fuga"
-        end
-      end
-      
-      it do
-        expect(Naminori::Notifier.configure.slack_enable?).to be_falsey 
+        expect(Naminori.configure.notifier.first.webhook_url).to eq "http://hoge.com"
+        expect(Naminori.configure.notifier.first.user).to eq "hoge"
+        expect(Naminori.configure.notifier.first.channel).to eq "fuga"
       end
     end
   end
