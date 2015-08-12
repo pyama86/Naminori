@@ -1,16 +1,15 @@
 #! /usr/bin/env ruby
+require 'naminori'
 module Naminori
   module Notifier
     class Configure
-      def self.attribute(name)
-        define_method(name, ->(val=nil){
-          @config ||= {}
-          @config[name] = val if val
-          @config[name]
-        })
-      end
+      extend Naminori::Attribute
 
-      attribute :name
+      def initialize(name)
+        type name
+      end
+      
+      attribute :type
       attribute :webhook_url
       attribute :channel
       attribute :user

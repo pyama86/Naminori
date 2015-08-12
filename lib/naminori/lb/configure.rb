@@ -2,10 +2,13 @@
 module Naminori
   class Lb
     class Configure
-      def check(roles)
-        @check_rols ||= []
-        @check_roles << roles
+      extend Naminori::Attribute
+      def initialize(name)
+        role name
       end
+
+      attribute :role
+      attribute :check
     end
   end
 end

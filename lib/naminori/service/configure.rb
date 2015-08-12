@@ -2,18 +2,12 @@
 module Naminori
   class Service
     class Configure
-      def initialize(role)
-        @config ||= {}
-        @config['role'] = role
+      extend Naminori::Attribute
+      def initialize(name)
+        role name
       end
 
-      def self.attribute(name)
-        define_method(name, ->(val=nil){
-          @config[name] = val if val
-          @config[name]
-        })
-      end
-
+      attribute :role
       attribute :service
       attribute :lb
       attribute :port
@@ -21,7 +15,7 @@ module Naminori
       attribute :vip
       attribute :method
       attribute :query
-      attribute :retry
+      attribute :retry_num
       attribute :timeout
     end
   end

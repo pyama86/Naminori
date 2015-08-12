@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe Naminori::Notifier do
+describe Naminori::Notifier::Configure do
   describe 'set_value_check' do
     describe "ok" do
       before do
@@ -13,6 +13,7 @@ describe Naminori::Notifier do
       end
 
       it do
+        expect(Naminori.configure.notifier.first.type).to eq :slack
         expect(Naminori.configure.notifier.first.webhook_url).to eq "http://hoge.com"
         expect(Naminori.configure.notifier.first.user).to eq "hoge"
         expect(Naminori.configure.notifier.first.channel).to eq "fuga"

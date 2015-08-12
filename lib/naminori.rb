@@ -1,8 +1,10 @@
 require "naminori/version"
+require "naminori/attribute"
 require 'naminori/configure'
 require 'naminori/serf'
 require 'naminori/lb'
 require 'naminori/lb/base'
+require 'naminori/lb/configure'
 require 'naminori/lb/lvs'
 require 'naminori/service'
 require 'naminori/service/base'
