@@ -15,7 +15,7 @@ module Naminori
           ops[:protocols].collect do |protocol|
             merge_option =  ops.merge({ protocol: protocol })
             if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
-              notifier(type, merge_option)
+              notify(type, merge_option)
               true
             end
           end.all? {|res| res }

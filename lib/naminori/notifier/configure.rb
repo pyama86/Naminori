@@ -4,6 +4,7 @@ module Naminori
   module Notifier
     class Configure
       extend Naminori::Attribute
+      attr_accessor :config
 
       def initialize(name)
         type name

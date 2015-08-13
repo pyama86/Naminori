@@ -1,5 +1,16 @@
 require 'spec_helper'
 describe Naminori::Lb::Lvs do
+  before do
+    Naminori.configure do |config|
+      config.service :dns_role do
+        service :dns
+      end
+    end
+    @service = Naminori::Service::Dns.new(
+      Naminori.configure.service.find {|config|config.service == :dns}
+    )
+  end
+
   describe 'add member' do
     before do
       allow_any_instance_of(Naminori::Service::Dns).to receive(:healty?).and_return(true)
@@ -12,10 +23,9 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service::Dns.new({})
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "udp"})
+        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "udp"})
         expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
-        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", service)).to eq true
+        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", @service)).to eq true
       end
     end
     describe 'ng' do
@@ -24,10 +34,9 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service::Dns.new({})
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "tcp"})
+        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "tcp"})
         expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
-        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", service)).to eq false 
+        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", @service)).to eq false 
       end
     end
   end
@@ -44,10 +53,9 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service::Dns.new({})
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "udp"})
+        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "udp"})
         expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53"
-        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", service)).to eq true
+        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", @service)).to eq true
       end
     end
     describe 'ng' do
@@ -56,10 +64,9 @@ describe Naminori::Lb::Lvs do
       end
 
       it do
-        service = Naminori::Service::Dns.new({})
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", service).merge({ protocol: "tcp"})
+        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "tcp"})
         expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53"
-        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", service)).to eq false 
+        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", @service)).to eq false 
       end
     end
   end

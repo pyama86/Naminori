@@ -22,8 +22,10 @@ module Naminori
   end
 
   def self.configure(&block)
-    @__config ||= Configure.new
-    @__config.instance_eval(&block) if block
+    if block
+      @__config = Configure.new
+      @__config.instance_eval(&block)
+    end
     @__config
   end
 end

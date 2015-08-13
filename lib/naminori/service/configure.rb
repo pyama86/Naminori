@@ -3,6 +3,7 @@ module Naminori
   class Service
     class Configure
       extend Naminori::Attribute
+      attr_accessor :config
       def initialize(name)
         role name
       end
@@ -15,7 +16,7 @@ module Naminori
       attribute :vip
       attribute :method
       attribute :query
-      attribute :retry_num
+      attribute :retry_c
       attribute :timeout
     end
   end

@@ -6,7 +6,7 @@ module Naminori
         dns = Resolv::DNS.new(:nameserver => ip )
         dns.timeouts = config.timeout
         begin
-          dns.getaddress(@config.query)
+          dns.getaddress(config.query)
         rescue => e
           false
         end
@@ -14,13 +14,14 @@ module Naminori
 
       def default_config
         {
+          lb:        "lvs",
           role:      "dns",
           port:      "53",
           protocols: ["udp", "tcp"],
           vip:       "192.168.77.9",
           method:    "nat",
           query:     "pepabo.com",
-          retry:     3,
+          retry_c:     3,
           timeout:   3
         }
       end

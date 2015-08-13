@@ -39,13 +39,9 @@ Naminori.configure do |config|
     lb      :lvs
     vip     "192.68.77.9"
   end
-
-  config.lb :lb_server do
-    check [:dns_server]
-  end
 end
 
-Naminori.event
+Naminori.run
 
 ```
 
@@ -81,7 +77,7 @@ Naminori.event
 #### health_check_example.rb
 1. Using cron to the health check of the service
 2. Service is removed from the member if that is not healthy
-   * Parameter [query, timeout ,retry]
+   * Parameter [query, timeout ,retry_c]
 
 ```ruby
 #! /usr/bin/env ruby
@@ -123,7 +119,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
           vip: "192.168.77.9",       # service vip
           method: "gateway",         # lvs_method gateway/ip/nat
           query: "pepabo.com",       # health_check_query
-          retry: 3,                  # health_check_retry_count
+          retry_c: 3,                  # health_check_retry_c_count
           timeout: 3,                # health_check_time_out
         }
 ```

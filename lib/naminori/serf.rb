@@ -2,13 +2,14 @@
 module Naminori
   class Serf
     @@event = nil
+
     class << self
       def gets
         @@event ||= STDIN.gets.chomp.match(/(?<node>.+?)\t(?<ip>.+?)\t(?<role>.+?)\t/)
       end
 
       def event_message
-        puts "event:#{ENV['SERF_EVENT']} value:#{get}"
+        puts "event:#{ENV['SERF_EVENT']} value:#{gets}"
       end
 
       def join?

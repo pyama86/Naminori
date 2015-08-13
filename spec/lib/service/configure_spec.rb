@@ -11,8 +11,8 @@ describe Naminori::Service::Configure do
             protocols    ['tcp']
             method       'gateway'
             query        'test'
-            retry_num    '3'
-            timeout      '5'
+            retry_c      3
+            timeout      5
             vip          '192.168.77.9'
           end
         end
@@ -26,8 +26,8 @@ describe Naminori::Service::Configure do
         expect(Naminori.configure.service.first.protocols).to eq ['tcp']
         expect(Naminori.configure.service.first.method).to eq 'gateway'
         expect(Naminori.configure.service.first.query).to eq 'test'
-        expect(Naminori.configure.service.first.retry_num).to eq '3'
-        expect(Naminori.configure.service.first.timeout).to eq '5'
+        expect(Naminori.configure.service.first.retry_c).to eq 3
+        expect(Naminori.configure.service.first.timeout).to eq 5
         expect(Naminori.configure.service.first.vip).to eq '192.168.77.9'
       end
     end
