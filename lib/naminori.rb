@@ -36,5 +36,4 @@ module Naminori
       end
     end
   end
-
 end
