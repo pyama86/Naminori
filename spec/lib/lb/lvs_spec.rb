@@ -20,23 +20,23 @@ describe Naminori::Lb::Lvs do
     describe 'ok' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.unregistered_rip)
+        @service.config.protocol 'udp'
       end
 
       it do
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "udp"})
-        expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
+        expect(Naminori::Lb::Lvs.command_option("add", "192.168.78.12", @service)).to eq "--add-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
         expect(Naminori::Lb::Lvs.add_member("192.168.78.12", @service)).to eq true
       end
     end
     describe 'ng' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.registered_rip)
+        @service.config.protocol 'tcp'
       end
 
       it do
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "tcp"})
-        expect(Naminori::Lb::Lvs.command_option("add", options)).to eq "--add-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
-        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", @service)).to eq false 
+        expect(Naminori::Lb::Lvs.command_option("add", "192.168.78.12", @service)).to eq "--add-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53 -m"
+        expect(Naminori::Lb::Lvs.add_member("192.168.78.12", @service)).to be_falsey
       end
     end
   end
@@ -50,23 +50,23 @@ describe Naminori::Lb::Lvs do
     describe 'ok' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.registered_rip)
+        @service.config.protocol 'udp'
       end
 
       it do
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "udp"})
-        expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53"
+        expect(Naminori::Lb::Lvs.command_option("delete", "192.168.78.12", @service)).to eq "--delete-server --udp-service 192.168.77.9:53 -r 192.168.78.12:53"
         expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", @service)).to eq true
       end
     end
     describe 'ng' do
       before do
         allow(Naminori::Lb::Lvs).to receive(:fetch_service).and_return(LbStub.unregistered_rip)
+        @service.config.protocol 'tcp'
       end
 
       it do
-        options = Naminori::Lb::Lvs.lvs_option("192.168.78.12", @service).merge({ protocol: "tcp"})
-        expect(Naminori::Lb::Lvs.command_option("delete", options)).to eq "--delete-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53"
-        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", @service)).to eq false 
+        expect(Naminori::Lb::Lvs.command_option("delete", "192.168.78.12", @service)).to eq "--delete-server --tcp-service 192.168.77.9:53 -r 192.168.78.12:53"
+        expect(Naminori::Lb::Lvs.delete_member("192.168.78.12", @service)).to be_falsey
       end
     end
   end

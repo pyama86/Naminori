@@ -115,7 +115,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
 #dns default
         {
           port: "53",                # service port
-          protocols: ["udp", "tcp"], # protocol(array)
+          protocol: "udp"            # protocol
           vip: "192.168.77.9",       # service vip
           method: "gateway",         # lvs_method gateway/ip/nat
           query: "pepabo.com",       # health_check_query

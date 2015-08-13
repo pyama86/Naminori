@@ -12,7 +12,7 @@ module Naminori
       attribute :service
       attribute :lb
       attribute :port
-      attribute :protocols
+      attribute :protocol
       attribute :vip
       attribute :method
       attribute :query

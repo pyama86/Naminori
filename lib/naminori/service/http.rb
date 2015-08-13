@@ -9,7 +9,7 @@ module Naminori
 
         begin
           http.get("/#{config.query}")
-        rescue => e
+        rescue
           false
         end
       end
@@ -19,11 +19,11 @@ module Naminori
           lb:         "lvs",
           role:       "http",
           port:       "80",
-          protocols:  ["tcp"],
+          protocol:   "tcp",
           vip:        "192.168.77.9",
           method:     "nat",
           query:      "index.html",
-          retry_c:      3,
+          retry_c:    3,
           timeout:    3
         }
       end

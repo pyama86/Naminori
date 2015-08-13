@@ -7,7 +7,7 @@ module Naminori
         dns.timeouts = config.timeout
         begin
           dns.getaddress(config.query)
-        rescue => e
+        rescue
           false
         end
       end
@@ -17,11 +17,11 @@ module Naminori
           lb:        "lvs",
           role:      "dns",
           port:      "53",
-          protocols: ["udp", "tcp"],
+          protocol:  "udp",
           vip:       "192.168.77.9",
           method:    "nat",
           query:     "pepabo.com",
-          retry_c:     3,
+          retry_c:   3,
           timeout:   3
         }
       end
