@@ -113,7 +113,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
   retry_c:    3,
   timeout:    3
 }
-
 ```
 
 ## Author
