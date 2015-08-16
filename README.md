@@ -21,7 +21,7 @@ Or install it yourself as:
 ####  envent_example.rb
 1. check the event classification
 2. add or delete rip if these member-join or member-leave(faile)
-3. enent target LoadBaranser is health_check with fetch member
+3. health_check with fetch member
 
 ```ruby
 #! /usr/bin/env ruby
@@ -35,9 +35,15 @@ Naminori.configure do |config|
   end
 
   config.service :dns_server do
-    service :dns
-    lb      :lvs
-    vip     "192.68.77.9"
+    service  :dns
+    protocol "udp"
+    vip      "192.68.77.9"
+  end
+
+  config.service :dns_server do
+    service  :dns
+    protocol "tcp"
+    vip      "192.68.77.9"
   end
 end
 
@@ -54,7 +60,7 @@ Naminori.run
   "interface": "enp0s9",
   "discover": "cache-dns",
   "tags": {
-    "role": "lb"
+    "role": "lb_server"
   },
   "log_level": "debug"
 }
@@ -69,59 +75,46 @@ Naminori.run
   "interface": "enp0s8",
   "discover": "cache-dns",
   "tags": {
-    "role": "dns"
+    "role": "dns_server"
   }
 }
 ```
 
-#### health_check_example.rb
-1. Using cron to the health check of the service
-2. Service is removed from the member if that is not healthy
-   * Parameter [query, timeout ,retry_c]
-
-```ruby
-#! /usr/bin/env ruby
-require 'rubygems'
-require 'naminori'
-
-Naminori.configure do |config|
-  config.notifier :slack do
-    webhook_url "https://hooks.slack.com/services/XXXXXX"
-    channel     "#pyama"
-  end
-
-  config.service :dns_server do
-    service :dns
-    lb      :lvs
-    vip     "192.68.77.9"
-  end
-
-  config.lb :lb_server do
-    check [:dns_server]
-  end
-end
-
-Naminori.check
-
-```
 ```zsh
 # crontab -l
 # Chef Name: health_check
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
-* * * * * for i in `seq 0 10 59`;do (sleep ${i}; /opt/serf/event_handlers/health_check_example.rb)& done;
+* * * * * for i in `seq 0 10 59`;do (sleep ${i}; /opt/serf/event_handlers/event_example.rb)& done;
 ```
 
 ### default parameter
-#dns default
-        {
-          port: "53",                # service port
-          protocol: "udp"            # protocol
-          vip: "192.168.77.9",       # service vip
-          method: "gateway",         # lvs_method gateway/ip/nat
-          query: "pepabo.com",       # health_check_query
-          retry_c: 3,                  # health_check_retry_c_count
-          timeout: 3,                # health_check_time_out
-        }
+#### DNS
 ```
+{
+  lb: "lvs"                  # lb type
+  port: "53",                # service port
+  protocol: "udp"            # protocol
+  vip: "192.168.77.9",       # service vip
+  method: "nat",             # lvs_method gateway/ip/nat
+  query: "pepabo.com",       # health_check_query
+  retry_c: 3,                # health_check_retry_c_count
+  timeout: 3,                # health_check_time_out
+}
+```
+#### HTTP
+```
+{
+  lb:         "lvs",
+  port:       "80",
+  protocol:   "tcp",
+  vip:        "192.168.77.9",
+  method:     "nat",
+  query:      "index.html",
+  retry_c:    3,
+  timeout:    3
+}
+
+```
+
 ## Author
 * pyama
