@@ -2,17 +2,22 @@
 module Naminori
   class Service
     class Configure
-      attr_reader :role, :port, :protocols, :vip, :method, :query, :retry, :timeout
-      def initialize(options)
-        @role      = options[:role]
-        @port      = options[:port]
-        @protocols = options[:protocols]
-        @vip       = options[:vip]
-        @method    = options[:method]
-        @query     = options[:query]
-        @retry     = options[:retry]
-        @timeout   = options[:timeout]
+      extend Naminori::Attribute
+      attr_accessor :config
+      def initialize(name)
+        role name
       end
+
+      attribute :role
+      attribute :service
+      attribute :lb
+      attribute :port
+      attribute :protocol
+      attribute :vip
+      attribute :method
+      attribute :query
+      attribute :retry_c
+      attribute :timeout
     end
   end
 end

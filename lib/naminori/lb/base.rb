@@ -9,9 +9,9 @@ module Naminori
         def delete_member(rip, service)
           raise "Called abstract method: add_member"
         end
-        
-        def notifier(type, options)
-          message = "#{type} member ip:#{options[:rip]} protocol:#{options[:protocol]} in vip:#{options[:vip]}"
+      
+        def notify(type, rip, service)
+          message = "#{type} member ip:#{rip} protocol:#{service.config.protocol} in vip:#{service.config.vip}"
           puts message
           Naminori::Notifier.notify(type, message)
         end

@@ -1,15 +1,15 @@
 #! /usr/bin/env ruby
 module Naminori
   module Notifier
-    class Slack < Base
+    class Slack
       class << self
-        def notify(type, message)
+        def notify(type, message, config)
           icon = type == "add" ? ":white_check_mark:" : ":no_entry_sign:"
           notifier = ::Slack::Notifier.new(
-            Naminori::Notifier.configure.webhook_url,
+            config.webhook_url,
             {
-              channel: Naminori::Notifier.configure.channel, 
-              username: Naminori::Notifier.configure.user
+              channel: config.channel, 
+              username: config.user
             }
           )
           notifier.ping  icon + message, icon_emoji: ":sparkle:"

@@ -4,57 +4,38 @@ module Naminori
     class Lvs < Naminori::Lb::Base
       class << self
         def add_member(rip, service)
-          transaction("add", lvs_option(rip, service)) if service.healty?(rip)
+          transaction("add", rip, service) if service.healty?(rip) && exist_ip?(service.config.vip, service) && !exist_ip?(rip, service)
         end
 
         def delete_member(rip, service)
-          transaction("delete", lvs_option(rip, service))
+          transaction("delete", rip, service) if exist_ip?(rip, service)
         end
 
-        def transaction(type, ops)
-          ops[:protocols].collect do |protocol|
-            merge_option =  ops.merge({ protocol: protocol })
-            if self.send("#{type}?", merge_option) && system("ipvsadm #{command_option(type, merge_option)}")
-              notifier(type, merge_option)
-              true
-            end
-          end.all? {|res| res }
+        def transaction(type, rip, service)
+          if system("ipvsadm #{command_option(type, rip, service)}")
+            notify(type, rip, service)
+          end
         end
 
-        def add?(ops)
-          exist_vip?(ops) && !delete?(ops)
-        end
-
-        def delete?(ops)
-          exist_ip?(ops, ops[:rip])
-        end
-
-        def exist_vip?(ops)
-          exist_ip?(ops, ops[:vip])
-        end
-
-        def exist_ip?(ops, ip)
-          fetch_service(ops).find do |line|
+        def exist_ip?(ip, service)
+          fetch_service(service).find do |line|
             line.match(/#{ip}/)
           end
         end
 
-        def fetch_service(ops)
-          service = `ipvsadm -Ln --#{ops[:protocol]}-service #{ops[:vip]}:#{ops[:port]}`.split("\n")
-          raise "fetch errror!" unless service
-          service
+        def fetch_service(service)
+          unless result = `ipvsadm -Ln --#{service.config.protocol}-service #{service.config.vip}:#{service.config.port}`.split("\n")
+            raise "fetch errror!"
+          end
+          result 
         end
 
-        def lvs_option(rip, service)
-          { service: service, vip: service.config.vip, rip: rip, protocols: service.config.protocols, port: service.config.port, method: service.config.method }
-        end
-
-        def command_option(type, ops)
+        def command_option(type, rip, service)
           case
           when type == "add"
-            "--#{type}-server --#{ops[:protocol]}-service #{ops[:vip]}:#{ops[:port]} -r #{ops[:rip]}:#{ops[:port]} #{method_option(ops[:method])}"
+            "--#{type}-server --#{service.config.protocol}-service #{service.config.vip}:#{service.config.port} -r #{rip}:#{service.config.port} #{method_option(service.config.method)}"
           when type == "delete"
-            "--#{type}-server --#{ops[:protocol]}-service #{ops[:vip]}:#{ops[:port]} -r #{ops[:rip]}:#{ops[:port]}"
+            "--#{type}-server --#{service.config.protocol}-service #{service.config.vip}:#{service.config.port} -r #{rip}:#{service.config.port}"
           end
         end
 
@@ -68,7 +49,6 @@ module Naminori
             "-i"
           end
         end
-
       end
     end
   end

@@ -1,23 +1,16 @@
 #! /usr/bin/env ruby
+require 'naminori'
 module Naminori
   module Notifier
     class Configure
-      def clear
-        @config = nil
-      end
+      extend Naminori::Attribute
+      attr_accessor :config
 
-      def slack_enable?
-        %w(webhook_url channel user).all? {|c| @config[c.to_sym] } if @config
+      def initialize(name)
+        type name
       end
       
-      def self.attribute(name)
-        define_method(name, ->(val=nil){
-          @config ||= {}
-          @config[name] = val if val
-          @config[name]
-        })
-      end
-
+      attribute :type
       attribute :webhook_url
       attribute :channel
       attribute :user

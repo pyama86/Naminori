@@ -8,21 +8,22 @@ module Naminori
         http.open_timeout = config.timeout
 
         begin
-          http.get("/#{@query}")
-        rescue => e
+          http.get("/#{config.query}")
+        rescue
           false
         end
       end
 
       def default_config
         {
+          lb:         "lvs",
           role:       "http",
           port:       "80",
-          protocols:  ["tcp"],
+          protocol:   "tcp",
           vip:        "192.168.77.9",
           method:     "nat",
           query:      "index.html",
-          retry:      3,
+          retry_c:    3,
           timeout:    3
         }
       end
