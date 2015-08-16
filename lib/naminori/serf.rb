@@ -6,6 +6,8 @@ module Naminori
     class << self
       def gets
         @@event ||= STDIN.gets.chomp.match(/(?<node>.+?)\t(?<ip>.+?)\t(?<role>.+?)\t/)
+      rescue
+        @@event
       end
 
       def event_message
