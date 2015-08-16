@@ -9,7 +9,7 @@ module Naminori
       end
 
       def event_message
-        puts "event:#{ENV['SERF_EVENT']} value:#{gets}"
+        puts "event:#{ENV['SERF_EVENT']} value:#{gets}" if gets
       end
 
       def join?
@@ -25,7 +25,7 @@ module Naminori
       end
 
       def role?(role)
-        gets[:role] == role
+        gets && gets[:role] == role
       end
 
       def get_alive_member_by_role(role)
