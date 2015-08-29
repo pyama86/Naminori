@@ -3,9 +3,9 @@ module Naminori
   class Service
     class Base
       attr_reader :config
-      def initialize(config_klass)
-        config_klass.config = default_config.merge(config_klass.config)
-        @config = config_klass
+      def initialize(service_config)
+        service_config.config = default_config.merge(service_config.config)
+        @config = service_config 
       end
 
       def run
